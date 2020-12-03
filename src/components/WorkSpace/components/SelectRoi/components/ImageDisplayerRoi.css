@@ -1,0 +1,44 @@
+.ImageDisplayerRoi  img {
+    position: relative;
+    max-width: 600px;
+    max-height: 600px;
+}
+
+.ImageDisplayerRoi {
+    height: calc(100% - 32px);
+    width: 100%;
+    background-color: #f4f4f4;
+}
+
+.ImageDisplayerRoi .ImageSpaceRoi {
+    height: calc(100% - 20px)
+}
+
+.ImageDisplayerRoi .ResultSelect {
+    height: 20px;
+    widows: 100%;
+    background-color: #3a3535;
+}
+
+.ImageDisplayerRoi .Rectangle{
+    border: 2px solid #ff7315;
+    width: 100%;
+    height: 100%;
+}
+
+
+.ImageDisplayerRoi .Point{
+    color: #ff7315;
+    text-align: center;
+    border: 2px dashed #ff7315;
+    width: 100%;
+    height: 100%;
+}
+
+
+.ImageDisplayerRoi .SelectedImageRoi {
+    position: relative;
+    overflow: hidden;
+    height: 600px;
+    width: 600px;
+}

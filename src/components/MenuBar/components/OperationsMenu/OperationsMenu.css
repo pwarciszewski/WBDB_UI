@@ -1,0 +1,17 @@
+.OperationsMenuButton {
+    padding-left: 10px;
+}
+
+.Variable {
+    padding: 2px;
+}
+
+.Operation {
+    border: solid 1px black;
+    padding: 2px;
+    margin: 2px;
+}
+
+.VariableDesigner {
+    padding: 1px;
+}

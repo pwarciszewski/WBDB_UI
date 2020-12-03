@@ -1,0 +1,10 @@
+export {getAllDataTree, 
+        getNewestID, 
+        fetchData, 
+        fetchImg, 
+        SERVER_IP, 
+        SERVER_IP_IMG, 
+        fetchOps, 
+        dispatchOperation, 
+        fetchRoutine, 
+        uploadNewRoutine} from './server_communication'

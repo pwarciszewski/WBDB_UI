@@ -1,0 +1,13 @@
+.RoiManager .AddButton{
+    width: 50%;
+}
+
+.RoiManager {
+    height: calc(100% - 62px);
+}
+
+.RoiManager .RoisList{
+    background: #919090;
+    height: 100%;
+    overflow-y: scroll;
+}

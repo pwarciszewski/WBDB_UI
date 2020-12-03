@@ -1,0 +1,16 @@
+.RoiTile{
+    padding: 10px;
+    color: #f4f4f4;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 14px;
+    background: #3a3535;
+    border: solid 1px #232020;
+}
+
+.RoiTile .close{
+    display: inline-block;
+    margin-left: 200px;
+    color: #ff7315;
+    height: min-content;
+    cursor: pointer;
+}

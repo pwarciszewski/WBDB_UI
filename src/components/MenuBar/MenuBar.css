@@ -1,0 +1,13 @@
+.MenuBar {
+    height: 55px;
+    background-color: #3a3535;
+    display: flex;
+    box-shadow: 0 5px 8px rgba(0,0,0,.15);
+    align-items: center;
+}
+
+.MenuBar .AddWindowSelection{
+    margin-left: auto;
+    margin-right: 2px;
+    order: 2;
+}

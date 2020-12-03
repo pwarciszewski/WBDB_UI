@@ -1,0 +1,41 @@
+body {
+    margin: 0;
+    background-color: #919090;
+}
+
+/* width */
+::-webkit-scrollbar {
+    width: 10px;
+  }
+  
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: #f4f4f4;
+  }
+  
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: #888;
+  }
+  
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #ff7315;
+  }
+
+  button {
+    background-color: #3a3535;
+    border: solid 1px  #ff7315;
+    color:  #ff7315;
+    padding: 5px 8px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    cursor: pointer;
+    outline: none;
+  }
+
+  button:active {
+    background-color: #919090;
+  }

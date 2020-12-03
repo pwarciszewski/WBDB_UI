@@ -1,0 +1,13 @@
+.Console {
+    color: #f4f4f4;
+    position: relative;
+    width: 100%;
+    overflow-y: scroll;
+    background-color: #232020;
+    font-family: "Courier New", monospace;
+    height: calc(100% - 30px);
+}
+
+.Console li {
+    list-style-type: "> ";
+}

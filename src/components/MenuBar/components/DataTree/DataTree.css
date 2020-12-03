@@ -1,0 +1,30 @@
+.tag {
+    display: none;
+}
+
+.tag-item {
+    margin: 0px;
+}
+
+.DataTree{
+    padding: 10px;
+}
+
+.react-dropdown-tree-select .dropdown .dropdown-trigger.arrow.bottom:after{
+    color: #ff7315;
+}
+
+.react-dropdown-tree-select .dropdown .dropdown-trigger.arrow.top:after{
+    color: #ff7315;
+}
+
+.react-dropdown-tree-select .dropdown .dropdown-trigger{
+    border: 1px solid #ff7315;
+    outline: none;
+}
+
+.react-dropdown-tree-select .dropdown .dropdown-content{
+    background-color: #f4f4f4;
+    overflow-y: scroll;
+    max-height: 80vh;
+}

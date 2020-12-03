@@ -1,0 +1,14 @@
+.ChartDisplayer {
+    height: calc(100% - 30px);
+}
+
+.ChartSelector {
+    font-family: Arial, Helvetica, sans-serif;
+    color: #f4f4f4;
+    background: #3a3535;
+}
+
+.ChartSelector select{
+    margin-right: 20px;
+    margin-left: 10px;
+}

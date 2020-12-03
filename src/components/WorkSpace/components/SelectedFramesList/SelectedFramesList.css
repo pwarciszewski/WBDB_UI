@@ -1,0 +1,10 @@
+.SelectedFramesList{
+    height: 100%;
+}
+
+.TilesSpace {
+    border: solid 1px black;
+    height: calc(100% - 63px);
+    overflow-y: scroll;
+    background-color: #a3a3a3;
+}

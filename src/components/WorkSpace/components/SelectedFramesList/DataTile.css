@@ -1,0 +1,28 @@
+.DataTile {
+    background-color: #a3a3a3; 
+    display: flex;
+    border: solid 1px #3a3535;
+    font-family: Arial, Helvetica, sans-serif;
+    
+}
+.DataTile[focussed=true]{
+    background-color: #ff7315;
+}
+
+.DataTile .TileContent {
+    padding: 5px;
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden !important;
+    text-overflow: ellipsis;
+}
+
+.DataTile .TileImage {
+    padding-inline-end: 10px;
+    vertical-align: middle;
+}
+
+.DataTile .close{
+    height: min-content;
+    cursor: pointer;
+}

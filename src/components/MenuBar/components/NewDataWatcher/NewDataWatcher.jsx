@@ -20,10 +20,17 @@ const NewDataWatcher = () => {
     }
 
     function addNewFrame (checked, newest_id, last_newest_id) {
+        // this function operates under an assumption that data frames are stored on the server with ids
+        // represented as following integers. It means for example that when newest_id is 5, and 
+        // last_newest_id is 3 the UI has to ask for frames with id 4 and id 5 to get all new data
         if(checked) {
             getNewestID(new_id => {setNewNewestId(new_id)})
             if(last_newest_id !== newest_id) {
-                dispatch(addLog('Detected new frame!'))
+                dispatch(addLog('Detected new frame(s)!'))
+                var requested_ids = []
+                for(var i = last_newest_id + 1; i <= newest_id; i++) {
+                    requested_ids.push(i)
+                }
                 setLastId(newest_id)
                 fetchData(data => {dispatch(addActiveFrame(data))}, [newest_id])
             }

@@ -14,7 +14,33 @@ import update from 'immutability-helper'
 //           properties: object containing data frame properties in a following fashion: key: value,
 //           results: same as above but for server generated results
 //           iter_token: token for an iteration, should be same as higher level iter_token}
-//
+
+const mergeStateWithNewFrames = (old_state, new_frames) => {
+    const current_focussed_index = old_state.findIndex(iter_frame => iter_frame.focussed === true)
+    var temp_state = []
+    if(current_focussed_index !== -1) {
+        temp_state= update(old_state, {
+            [current_focussed_index]: {focussed: {$set: false}}
+        })
+    }
+    for(const frame of new_frames) {
+        const destination_iter_token = frame.data.iter_token
+        const index_to_put = temp_state.findIndex(iter_frame => iter_frame.iter_token === destination_iter_token)
+        if(index_to_put === -1) {
+            temp_state = [
+                {iter_token: destination_iter_token, focussed: false, data_frames: [frame]},
+                ...temp_state
+            ]
+        } else {
+            temp_state[index_to_put].data_frames = [
+                frame,
+                ...temp_state[index_to_put].data_frames
+            ]
+        }
+    }
+    temp_state[0].focussed = true
+    return(temp_state)
+}
 
 
 const activeframes = (state = [], action) => {
@@ -28,14 +54,7 @@ const activeframes = (state = [], action) => {
         case 'CLEAR_FRAMES':
             return []
         case 'ADD_ACTIVE_FRAMES':
-            temp_list = action.new_frames
-            temp_list.forEach(frame => frame.focussed = false)
-            temp_list[0].focussed = true
-            const cleanted_old_state = state.map(frame => ({...frame, focussed: false}))
-            return ([
-                ...temp_list,
-                ...cleanted_old_state
-            ])
+            return(mergeStateWithNewFrames(state, action.new_frames))
         case 'REMOVE_ONE_OF_ACTIVE_FRAMES':
             let index = state.indexOf(action.frame_to_remove)
             let new_focussed_index
@@ -92,9 +111,12 @@ const activeframes = (state = [], action) => {
             const createUpdatedState = (frames) => {
                 let new_state = state
                 for(const frame of frames){
-                    const index_to_update = state.indexOf(state.find(in_state_frame => in_state_frame.id === frame.id))
+                    const iter_index_to_update = state.findIndex(in_state_iter => in_state_iter.iter_token === frame.data.iter_token)
+                    const index_to_update = state[iter_index_to_update].data_frames.findIndex(in_state_frame => in_state_frame.id === frame.id)
                     new_state = update(new_state, {
-                        [index_to_update]: {data: {$set: frame.data}}
+                        [iter_index_to_update]: {
+                            data_frames: {
+                                [index_to_update]: {data: {$set: frame.data}}}}
                     })
                 }
             return new_state

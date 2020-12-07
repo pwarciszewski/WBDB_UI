@@ -49,7 +49,7 @@ export function getNewestID(wrapped_action) {
 
 export function fetchData(wrapped_action, selected_frames, group_by_iter = false) {
     postData(SERVER_IP + '/fetchdata/', {'selected': selected_frames, 'group_by_iter': group_by_iter})
-        .then(data => {wrapped_action(data);console.log(data)})
+        .then(data => {wrapped_action(data)})
         .catch(err => console.log(err))
 }
 

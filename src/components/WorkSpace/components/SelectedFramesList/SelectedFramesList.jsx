@@ -16,8 +16,8 @@ const scrollToRef = (ref, spaceRef) => {
                                                             
 
 const SelectedFramesList = () => {
-    const active_frames = useSelector(state => state.activeframes)
-    const frame_focussed = active_frames.find(frame => frame.focussed === true)
+    const active_iterations = useSelector(state => state.activeframes)
+    const iter_focussed = active_iterations.find(iter => iter.focussed === true)
 
     const tileRef = useRef(null)
     const spaceRef = useRef(null)
@@ -28,11 +28,11 @@ const SelectedFramesList = () => {
         <div className="SelectedFramesList">
             <NavigButtons />
             <div className='TilesSpace' ref={spaceRef}>
-                {active_frames.map((frame) => {
-                    if(frame.id === frame_focussed.id) {
-                        return(<div ref={tileRef} key={frame.id}><DataTile key={frame.id} data_frame={frame}/></div>) //PASS THE REFERENCE INTO THE DATATILE!!!!
+                {active_iterations.map((iteration) => {
+                    if(iteration.iter_token === iter_focussed.iter_token) {
+                        return(<div ref={tileRef} key={iteration.iter_token}><DataTile key={iteration.iter_token} iter_frame={iteration}/></div>) //PASS THE REFERENCE INTO THE DATATILE!!!!
                     } else {
-                        return(<div key={frame.id}><DataTile key={frame.id} data_frame={frame}/></div>)
+                        return(<div key={iteration.iter_token}><DataTile key={iteration.iter_token} iter_frame={iteration}/></div>)
                     }
                 })}
             </div>

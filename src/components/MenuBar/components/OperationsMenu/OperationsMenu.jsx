@@ -59,9 +59,11 @@ const findFramesForGroup = (frames, group_name) => {
 
 const findDiferentFramesGroups = (frames) => {
     const frames_groups = []
-    for(const frame of frames) {
-        if(!frames_groups.includes(frame.data.sequence_name)) {
-            frames_groups.push(frame.data.sequence_name)
+    for(const iteration of frames){
+        for(const frame of iteration.data_frames) {
+            if(!frames_groups.includes(frame.data.sequence_name)) {
+                frames_groups.push(frame.data.sequence_name)
+            }
         }
     }
     return(frames_groups)

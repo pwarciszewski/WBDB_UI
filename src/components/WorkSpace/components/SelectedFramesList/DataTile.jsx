@@ -18,20 +18,42 @@ const prepareImgUrl = (data_frame) => {
     return(url)
 }
 
-const DataTile = ({ data_frame }) => {
+//Old version
+// const DataTile = ({ data_frame }) => {
+//     const dispatch = useDispatch()
+//     
+//     return(
+//         <div className="DataTile" 
+//              focussed={data_frame.focussed.toString()} >
+//             <div className="TileContent" onClick={()=>dispatch(setFocus(data_frame))}>
+//                 <img className="TileImage" src={prepareImgUrl(data_frame)}
+//                     height={70}
+//                     width={70}/>
+//                 {data_frame.data.name + ' ' + ' (ID: ' + data_frame.id + ')'}
+//             </div>
+//             
+//             <div className="close" onClick={()=>dispatch(removeActiveFrame(data_frame))}>
+//             {'\u2715'}
+//             </div>
+//         </div>
+//         
+//     )
+// }
+
+//Add image represntation
+const DataTile = ({ iter_frame }) => {
     const dispatch = useDispatch()
-    
     return(
         <div className="DataTile" 
-             focussed={data_frame.focussed.toString()} >
-            <div className="TileContent" onClick={()=>dispatch(setFocus(data_frame))}>
-                <img className="TileImage" src={prepareImgUrl(data_frame)}
-                    height={70}
-                    width={70}/>
-                {data_frame.data.name + ' ' + ' (ID: ' + data_frame.id + ')'}
+             focussed={iter_frame.focussed.toString()} >
+            <div className="TileContent" onClick={()=>dispatch(setFocus(iter_frame))}>
+                Iteration data collected from:
+                {iter_frame.data_frames.map((data_element) => {
+                    return(<div key = {data_element.id}> {data_element.data.data_source} </div>)
+                })}
             </div>
             
-            <div className="close" onClick={()=>dispatch(removeActiveFrame(data_frame))}>
+            <div className="close" onClick={()=>dispatch(removeActiveFrame(iter_frame))}>
             {'\u2715'}
             </div>
         </div>

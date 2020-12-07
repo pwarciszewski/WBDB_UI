@@ -1,5 +1,22 @@
 import update from 'immutability-helper'
 
+// State entry:
+// {iter_token: string representing given iteration
+//  data_frames: list of data frames in a given iteration
+//  focussed: boolean representing if a given iteration is now foccussed }
+
+// data_frames list entry:
+// This entry contains actuall information about collected and processed data:
+// {id: int server side ID of a data frame
+//  data: {name: string representing data frame,
+//           sequence_name: string representing sequence name in which data was collected,
+//          data_source: string representing source of the data i.e a device,
+//           properties: object containing data frame properties in a following fashion: key: value,
+//           results: same as above but for server generated results
+//           iter_token: token for an iteration, should be same as higher level iter_token}
+//
+
+
 const activeframes = (state = [], action) => {
     let temp_list = []
     switch(action.type) {
@@ -74,7 +91,6 @@ const activeframes = (state = [], action) => {
         case 'UPDATE_ACTIVE_FRAMES':
             const createUpdatedState = (frames) => {
                 let new_state = state
-                console.log(frames)
                 for(const frame of frames){
                     const index_to_update = state.indexOf(state.find(in_state_frame => in_state_frame.id === frame.id))
                     new_state = update(new_state, {

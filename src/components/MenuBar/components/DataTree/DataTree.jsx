@@ -55,7 +55,7 @@ const DataTree = () => {
 
     function onChange (currentNode, selectedNodes) {
         let selected_nodes = extractNodesFromInternalIDs(selectedNodes, data)
-        fetchData(data => {dispatch(setActiveFrames(data))}, getFramesIDsFromTree(selected_nodes))
+        fetchData(data => {dispatch(setActiveFrames(data))}, getFramesIDsFromTree(selected_nodes), true)
        }
 
     return(

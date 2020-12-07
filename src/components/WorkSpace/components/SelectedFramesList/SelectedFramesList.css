@@ -4,7 +4,11 @@
 
 .TilesSpace {
     border: solid 1px black;
-    height: calc(100% - 63px);
+    height: calc(100% - 83px);
     overflow-y: scroll;
     background-color: #a3a3a3;
+}
+
+.TilesSpace .SourceSelection {
+    background-color: #3a3535;
 }

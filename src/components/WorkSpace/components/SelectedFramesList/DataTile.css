@@ -26,3 +26,7 @@
     height: min-content;
     cursor: pointer;
 }
+
+.DataTile .FileList{
+    font-size: 12px;
+}

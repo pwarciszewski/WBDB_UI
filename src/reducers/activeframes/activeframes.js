@@ -12,7 +12,7 @@ import update from 'immutability-helper'
 //           sequence_name: string representing sequence name in which data was collected,
 //          data_source: string representing source of the data i.e a device,
 //           properties: object containing data frame properties in a following fashion: key: value,
-//           results: same as above but for server generated results
+//           results: object containing data frame results in a following fashion: key: {type: type_string, value: value_string},
 //           iter_token: token for an iteration, should be same as higher level iter_token}
 
 const mergeStateWithNewFrames = (old_state, new_frames) => {
@@ -50,6 +50,7 @@ const activeframes = (state = [], action) => {
             temp_list = action.active_frames_list.reverse()
             temp_list.forEach(frame => frame.focussed = false)
             temp_list[0].focussed = true
+            console.log(temp_list)
             return temp_list
         case 'CLEAR_FRAMES':
             return []

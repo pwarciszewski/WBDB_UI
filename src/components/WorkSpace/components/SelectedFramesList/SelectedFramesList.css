@@ -9,6 +9,12 @@
     background-color: #a3a3a3;
 }
 
-.TilesSpace .SourceSelection {
+.SelectedFramesList .SourceSelection {
     background-color: #3a3535;
+    width: 100%;
+}
+
+.SelectedFramesList .NavigButtons {
+    background-color: #3a3535;
+    width: 100%;
 }

@@ -50,7 +50,6 @@ const activeframes = (state = [], action) => {
             temp_list = action.active_frames_list.reverse()
             temp_list.forEach(frame => frame.focussed = false)
             temp_list[0].focussed = true
-            console.log(temp_list)
             return temp_list
         case 'CLEAR_FRAMES':
             return []

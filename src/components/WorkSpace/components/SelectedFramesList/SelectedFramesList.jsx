@@ -33,7 +33,6 @@ const findAvailableIMGResults = (device_name, frames_list) => {
     for(let iteration of frames_list) {
         for(let frame of iteration.data_frames) {
             for(let result in frame.data.results) {
-                console.log(result)
                 if(frame.data.results[result].type === 'IMG' && frame.data.data_source === device_name) {
                     if(! results_names_list.includes(result)){
                         results_names_list.push(result)
@@ -42,7 +41,6 @@ const findAvailableIMGResults = (device_name, frames_list) => {
             }
         }
     }
-    console.log(results_names_list)
     return(results_names_list)
 }
 

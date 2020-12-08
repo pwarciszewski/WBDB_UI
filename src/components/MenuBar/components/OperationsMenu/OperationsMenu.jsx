@@ -38,26 +38,43 @@ const renderGroupOption = (group_name) => {
     return(<option key={group_name} value={group_name}>{group_name}</option>)
 }
 
-const findFocussedFrame = (frames) => {
-    for(const frame of frames) {
-        if(frame.focussed === true) {
-            return([frame.id])
+const findFocussedIterationIDS = (frames, dev_name) => {
+    const focussed_iteration = frames.find(iteration => iteration.focussed === true)
+    if(focussed_iteration === undefined) {
+        return([])
+    }
+    let ids_list = []
+    for(const frame of focussed_iteration.data_frames) {
+        if(dev_name === 'ALL') {
+            ids_list.push(frame.id)
+        } else {
+            if(frame.data.data_source === dev_name){
+                ids_list.push(frame.id)
+            }
         }
     }
-    return([])
+    return(ids_list)
 }
 
-const findFramesForGroup = (frames, group_name) => {
-    const frames_list = []
-    for(const frame of frames){
-        if(frame.data.sequence_name === group_name){
-            frames_list.push(frame.id)
+const findFramesForGroup = (frames, group_name, dev_name) => {
+    let frames_list = []
+    for(const iteration of frames){
+        for(const frame of iteration.data_frames){
+            if(dev_name === 'ALL'){
+                if(frame.data.sequence_name === group_name){
+                    frames_list.push(frame.id)
+                }
+            } else {
+                if(frame.data.sequence_name === group_name && frame.data.data_source === dev_name) {
+                    frames_list.push(frame.id)
+                }
+            }
         }
     }
     return(frames_list)
 }
 
-const findDiferentFramesGroups = (frames) => {
+const findDifferentFramesGroups = (frames) => {
     const frames_groups = []
     for(const iteration of frames){
         for(const frame of iteration.data_frames) {
@@ -69,11 +86,11 @@ const findDiferentFramesGroups = (frames) => {
     return(frames_groups)
 }
 
-const extractIds = (active_frames, group_name) => {
+const extractIds = (active_frames, group_name, dev_name) => {
     if(group_name === 'FOCUSSED') {
-        return(findFocussedFrame(active_frames))
+        return(findFocussedIterationIDS(active_frames, dev_name))
     } else {
-        return(findFramesForGroup(active_frames, group_name))
+        return(findFramesForGroup(active_frames, group_name, dev_name))
     }
 }
 
@@ -91,6 +108,19 @@ const extractParameters = (operation_in, roi_in) => {
     return(extracted_params)
 }
 
+const findAvailableDevices = (frames_list) => {
+    let devices_names_list = []
+    for(let iteration of frames_list) {
+        for(let frame of iteration.data_frames) {
+            let temp_name = frame.data.data_source
+            if(!devices_names_list.includes(temp_name)) {
+                devices_names_list.push(temp_name)
+            }
+        }
+    }
+    return(devices_names_list)
+}
+
 const OperationsMenu = () => {
     const dispatch = useDispatch()
 
@@ -104,8 +134,10 @@ const OperationsMenu = () => {
 
     const available_operations = useSelector(state => state.availableops)
     const active_frames = useSelector(state => state.activeframes)
-    const frames_groups = findDiferentFramesGroups(active_frames)
+    const frames_groups = findDifferentFramesGroups(active_frames)
+    const available_devices = findAvailableDevices(active_frames)
     const [selected_group, setSelectedGroup] = useState('FOCUSSED')
+    const [selected_device, setSelectedDevice] = useState('ALL')
 
     const [selected_op_object, setSelectedOpObj] = useState({})
     const [selected_op_name, setSelectedOp] = useState('INIT')
@@ -165,6 +197,10 @@ const OperationsMenu = () => {
                 <div>
                     <h2>Operations Menu</h2>
                     <h3>Selected frames</h3>
+                    <select value={selected_device} onChange={event=>setSelectedDevice(event.target.value)}>
+                        <option key='ALL' value='ALL'>All devices</option>
+                        {available_devices.map(dev_name => renderGroupOption(dev_name))}
+                    </select>
                     <select value={selected_group} onChange={event=>setSelectedGroup(event.target.value)}>
                         <option key='FOCUSSED' value='FOCUSSED'>Currently focussed frame</option>
                         {frames_groups.map(group_name => renderGroupOption(group_name))}
@@ -184,7 +220,7 @@ const OperationsMenu = () => {
                 <div>
                     <button onClick={()=>{
                         if(selected_op_name!=='INIT'){
-                            dispatchOperation(extractIds(active_frames, selected_group),
+                            dispatchOperation(extractIds(active_frames, selected_group, selected_device),
                                               extractParameters(selected_op_object, available_rois.find((roi)=>(roi.roi_id == selected_roi))),
                                               selected_op_name,
                                               data=>dispatch(addLog(data)),

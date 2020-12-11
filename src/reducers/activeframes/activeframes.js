@@ -3,7 +3,7 @@ import update from 'immutability-helper'
 // State entry:
 // {iter_token: string representing given iteration
 //  data_frames: list of data frames in a given iteration
-//  focussed: boolean representing if a given iteration is now foccussed }
+//  focussed: boolean representing if a given iteration is now focussed }
 
 // data_frames list entry:
 // This entry contains actuall information about collected and processed data:

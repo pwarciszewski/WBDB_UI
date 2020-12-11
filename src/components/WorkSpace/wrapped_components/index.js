@@ -68,8 +68,8 @@ export const WrappedChartDisplayer = (props) => (
     <WindowWrapper
       id={props.id}
       window_name='Chart'
-      default_width={600}
-      default_height={400}>
+      default_width={840}
+      default_height={370}>
         <ChartDisplayer/>
     </WindowWrapper>
 )

@@ -7,21 +7,50 @@ import './ChartDisplayer.css'
 
 const COLOR_PALETTE = ['#111d5e', '#c70039', '#f37121', '#ffbd69', '#086972', '#01a9b4', '#87dfd6', '#fbfd8a', '#184d47', '#96bb7c']
 
-const getOptionsForAxes = (data_frames) => {
+const compareArrays = (array1, array2) => {
+    // if the other array is a falsy value, return
+    if (!array2 || !array1)
+        return false;
+
+    // compare lengths - can save a lot of time 
+    if (array1.length != array2.length)
+        return false;
+
+    for (var i = 0, l=array1.length; i < l; i++) {
+        // Check if we have nested arrays
+        if (array1[i] instanceof Array && array2[i] instanceof Array) {
+            // recurse into the nested arrays
+            if (compareArrays(!array1[i],(array2[i])))
+                return false;       
+        }           
+        else if (array1[i] != array2[i]) { 
+            // Warning - two different object instances will never be equal: {x:20} != {x:20}
+            return false;   
+        }           
+    }       
+    return true;
+}
+
+
+const getOptionsForAxes = (iteration_list) => {
     let options = {}
     let properties = []
     let results = []
 
-    for(const entry of data_frames){
-        for(const property in entry.data.properties) {
-          if(!properties.includes(property)){
-            properties.push(property)
-          }
-        }
-        for(const result in entry.data.results) {
-          if(!results.includes(result) && entry.data.results[result].type === 'NUM'){
-            results.push(result)
-          }
+    for(const iteration of iteration_list){
+        for(const entry of iteration.data_frames){
+            for(const property in entry.data.properties) {  
+                const obj = [entry.data.data_source, property, 'property']
+                if(!properties.some(el => compareArrays(el, obj))){
+                  properties.push(obj)
+                }
+              }
+            for(const result in entry.data.results) {
+                const obj = [entry.data.data_source, result, 'result']
+                if(!results.some(el => compareArrays(el, obj)) && entry.data.results[result].type === 'NUM'){
+                  results.push(obj)
+                }
+            }
         }
       }
       options['properties'] = properties
@@ -29,33 +58,40 @@ const getOptionsForAxes = (data_frames) => {
       return options
 }
 
-const getResultStr = (result) => ('Result: ' + result)
+const getResultStr = (result) => (result[0] +' result: ' + result[1])
 
-const getPropertyStr = (property) => ('Property: ' + property)
+const getPropertyStr = (property) => (property[0] +' property: ' + property[1])
 
-const extractDataFromFrames = (data_frames, value_source) => {
-    //value_source is a string that represents source of the data we are gathering. Usually it is a name of a server-side function that calculated given result or property for a frame.
-    //As this function is used in ChartDisplayer, it assumes that the name starts with 'p' or 'r', which helps to determine if a value should be seeken in Properties or Results.
-
-    const source_char = value_source.slice(0,1)
-    const option = value_source.slice(1)
-
+const extractDataFromFrames = (data_frames, raw_value_source) => {
     let values = {}
-
-    switch(source_char) {
-        case 'p':
-            for(const frame of data_frames) {
-                try{
-                    values[frame.id] = frame.data.properties[option]
-                } catch(e){}
-            }
-        case 'r':
-            for(const frame of data_frames) {
-                try{
-                    values[frame.id] = frame.data.results[option].value
-                } catch(e){}
-            }
-        default: {}
+    if(raw_value_source !== 'INIT'){
+        const value_source = JSON.parse(raw_value_source)
+        const data_source = value_source[0]
+        const option = value_source[1]
+        const option_type = value_source[2]
+    
+    
+        switch(option_type) {
+            case 'property':
+                for(const iteration of data_frames)
+                    for(const frame of iteration.data_frames) {
+                        try{
+                            if(frame.data.data_source === data_source){
+                                values[frame.id] = [frame.data.properties[option], frame.data.iter_token]
+                            }
+                        } catch(e){}
+                    }
+            case 'result':
+                for(const iteration of data_frames)
+                    for(const frame of iteration.data_frames) {
+                        try{
+                            if(frame.data.data_source === data_source){
+                                values[frame.id] = [frame.data.results[option].value, frame.data.iter_token]
+                            }
+                        } catch(e){}
+                    }
+            default: {}
+        }
     }
     return values
 }
@@ -66,7 +102,8 @@ const getDataPointsFromXandY = (x_data, y_data) => {
         if(y_data.hasOwnProperty(point)){
             let temp = {}
             temp.id = point
-            temp.data = [Number(x_data[point]), Number(y_data[point])]
+            temp.data = [Number(x_data[point][0]), Number(y_data[point][0])]
+            temp.iter_token = x_data[point][1]
             data.push(temp)
         }
       }
@@ -86,26 +123,29 @@ const getRangesForPlot = (data_points) => {
     return({'min_x':min_x - 0.05*range_x, 'max_x':max_x + 0.05*range_x, 'min_y':min_y - 0.05*range_y, 'max_y':max_y + 0.05*range_y})
 }
 
-const findDiferentFramesGroups = (frames) => {
+const findDiferentFramesGroups = (frames_in_iterations) => {
     const frames_groups = []
-    for(const frame of frames) {
-        if(!frames_groups.includes(frame.data.sequence_name)) {
-            frames_groups.push(frame.data.sequence_name)
+    for(const iteration of frames_in_iterations) {
+        if(!frames_groups.includes(iteration.data_frames[0].data.sequence_name)) {
+            frames_groups.push(iteration.data_frames[0].data.sequence_name)
         }
     }
     return(frames_groups)
 }
 
-const assignColorsToIds = (data_frames) => {
-    const frames_groups = findDiferentFramesGroups(data_frames)
+const assignColorsToIterations = (iterations_list) => {
+    const frames_groups = findDiferentFramesGroups(iterations_list)
     const group_color_assignment = {}
     for(const [i, item] of frames_groups.entries()) {
         group_color_assignment[item] = COLOR_PALETTE[i % COLOR_PALETTE.length]
     }
     const id_color_assignment = {}
-    for(const frame of data_frames) {
-        id_color_assignment[frame.id] = group_color_assignment[frame.data.sequence_name]
+    for(const iteration of iterations_list){
+        for(const frame of iteration.data_frames) {
+            id_color_assignment[frame.id] = group_color_assignment[frame.data.sequence_name]
+        }
     }
+
     return(id_color_assignment)
 }
 
@@ -113,18 +153,21 @@ const renderOptionsForEchartsChart = (data, xlabel, ylabel, ranges, color_assign
     let x_name = ''
     let y_name = ''
 
-    if(xlabel[0] === 'p' || xlabel[0] ==='r'){
-        x_name = xlabel.slice(1)
+    if(xlabel !== 'INIT'){
+        const xlabel_parsed = JSON.parse(xlabel)
+        x_name = xlabel_parsed[0] + ': ' + xlabel_parsed[1]
     }
 
-    if(ylabel[0] === 'p' || ylabel[0] ==='r'){
-        y_name = ylabel.slice(1)
+    if(ylabel !== 'INIT'){
+        const ylabel_parsed = JSON.parse(ylabel)
+        y_name = ylabel_parsed[0] + ': ' + ylabel_parsed[1]
     }
 
     const options = {
         backgroundColor: '#f4f4f4',
         tooltip: {
           trigger: 'axis',
+          showContent: false,
           axisPointer: {
               type: 'cross'
           }
@@ -157,7 +200,7 @@ const renderOptionsForEchartsChart = (data, xlabel, ylabel, ranges, color_assign
 
     for(const item of data) {
         options.series.push({
-            name: item.id,
+            name: item.iter_token,
             data: [item.data],
             type: 'scatter',
             color: color_assignment[item.id],
@@ -174,7 +217,7 @@ const renderOptionsForEchartsChart = (data, xlabel, ylabel, ranges, color_assign
 
     return options
 }
-
+// SAVE AS CSV FUNCTIONS //
 const exportToCsv =(filename, rows) => {
     var processRow = function (row) {
         var finalVal = '';
@@ -191,7 +234,7 @@ const exportToCsv =(filename, rows) => {
             finalVal += result;
         }
         return finalVal + '\n';
-    };
+    }
   
     var csvFile = '';
     for (var i = 0; i < rows.length; i++) {
@@ -223,13 +266,13 @@ const handleCsvDownload = (filename, points) => {
     }
     exportToCsv(filename, extracted_data_points)
 } 
-
+//////
 
 const ChartDisplayer = () => {
     const dispatch = useDispatch()
     const data_frames = useSelector(state => state.activeframes)
 
-    const color_assignment = assignColorsToIds(data_frames)
+    const color_assignment = assignColorsToIterations(data_frames)
 
     const [x_axis_selection, setXAxis] = useState('INIT')
     const [y_axis_selection, setYAxis] = useState('INIT')
@@ -242,7 +285,7 @@ const ChartDisplayer = () => {
     const points = getDataPointsFromXandY(x_data, y_data)
     const ranges = getRangesForPlot(points)
     
-    const events = {click: (e) => dispatch(setFocus(data_frames.find(frame => frame.id === Number(e.seriesName))))}
+    const events = {click: (e) => dispatch(setFocus(data_frames.find(frame => frame.iter_token === e.seriesName)))}
 
 
     return(
@@ -251,16 +294,22 @@ const ChartDisplayer = () => {
                 Select X:
                 <select value={x_axis_selection} onChange={event=>setXAxis(event.target.value)}>
                     <option value={'INIT'}>Select values source</option>
-                    {//Additional 'p' or 'r' in value is used later to determine if a source of the value is located in properties or in results of data frames
-                    }
-                    {avail_options.properties.map((property, index) => (<option key={'p' + String(index)} value={'p' + property}>{getPropertyStr(property)}</option>))}
-                    {avail_options.results.map((result, index) => (<option key={'r' + String(index)} value={'r' + result}>{getResultStr(result)}</option>))}
+                    {avail_options.properties.map((property, index) => (<option key={'p' + String(index)} 
+                                                                                value={JSON.stringify(property)}>
+                                                                                    {getPropertyStr(property)}</option>))}
+                    {avail_options.results.map((result, index) => (<option key={'r' + String(index)} 
+                                                                           value={JSON.stringify(result)}>
+                                                                               {getResultStr(result)}</option>))}
                 </select>
                 Select Y:
                 <select value={y_axis_selection} onChange={event=>setYAxis(event.target.value)}>
                     <option value={'INIT'}>Select values source</option>
-                    {avail_options.properties.map((property, index) => (<option key={'p' + String(index)} value={'p' + property}>{getPropertyStr(property)}</option>))}
-                    {avail_options.results.map((result, index) => (<option key={'r' + String(index)} value={'r' + result}>{getResultStr(result)}</option>))}
+                    {avail_options.properties.map((property, index) => (<option key={'p' + String(index)} 
+                                                                                value={JSON.stringify(property)}>
+                                                                                    {getPropertyStr(property)}</option>))}
+                    {avail_options.results.map((result, index) => (<option key={'r' + String(index)} 
+                                                                           value={JSON.stringify(result)}>
+                                                                               {getResultStr(result)}</option>))}
                 </select>
                 <button onClick={() => handleCsvDownload('result.csv', points)}>Download</button>
             </div>

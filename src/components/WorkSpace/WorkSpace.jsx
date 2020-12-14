@@ -7,9 +7,8 @@ import { WrappedLogList,
          WrappedImageDisplayer, 
          WrappedSelectRoi, 
          WrappedRoiManager,
-         WrappedChartDisplayer } from './wrapped_components'
-import { ChartDisplayer } from './components'
-
+         WrappedChartDisplayer,
+         WrappedCSVDisplayer } from './wrapped_components'
 
 
 const selectWindow = ({id, window_type}) => {
@@ -28,6 +27,8 @@ const selectWindow = ({id, window_type}) => {
             return(<WrappedRoiManager key={id} id={id}/>)
         case 'ChartDisplayer':
             return(<WrappedChartDisplayer key={id} id={id}/>)
+        case 'CSVDisplayer':
+            return(<WrappedCSVDisplayer key={id} id={id}/>)
         default:
             console.log('Unknown window')
     }

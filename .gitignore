@@ -1,3 +1,4 @@
  
 node_modules
 build
+src/components/WorkSpace/components/ChartDisplayer/ChartDisplayer_old.jsx

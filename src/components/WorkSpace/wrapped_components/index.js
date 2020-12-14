@@ -1,6 +1,6 @@
 import React from 'react'
 import { default as WindowWrapper } from './WindowWrapper'
-import { LogList, SelectedFramesList, FrameAttributesList, ImageDisplayer, SelectRoi, RoiManager, ChartDisplayer } from '../components'
+import { LogList, SelectedFramesList, FrameAttributesList, ImageDisplayer, SelectRoi, RoiManager, ChartDisplayer, CSVDisplayer } from '../components'
 
 export const WrappedLogList = (props) => (
     <WindowWrapper 
@@ -71,5 +71,15 @@ export const WrappedChartDisplayer = (props) => (
       default_width={840}
       default_height={370}>
         <ChartDisplayer/>
+    </WindowWrapper>
+)
+
+export const WrappedCSVDisplayer = (props) => (
+    <WindowWrapper
+      id={props.id}
+      window_name = 'CSV Chart'
+      default_width={840}
+      default_height={370}>
+        <CSVDisplayer/>
     </WindowWrapper>
 )

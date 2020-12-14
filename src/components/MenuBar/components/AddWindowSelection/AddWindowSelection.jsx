@@ -17,6 +17,7 @@ const AddWindowSelection = () => {
                     <div className="dropdown-selection" onClick={()=>dispatch(addWindow('ROIs'))}>Display ROIs</div>
                     <div className="dropdown-selection" onClick={()=>dispatch(addWindow('RoiManager'))}>ROIs manager</div>
                     <div className="dropdown-selection" onClick={()=>dispatch(addWindow('ChartDisplayer'))}>Graph displayer</div>
+                    <div className="dropdown-selection" onClick={()=>dispatch(addWindow('CSVDisplayer'))}>CSV displayer</div>
             </div>
         </div>
     )

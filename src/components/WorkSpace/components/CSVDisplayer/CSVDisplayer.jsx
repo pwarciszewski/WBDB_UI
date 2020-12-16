@@ -72,6 +72,9 @@ const loadManyCSVFiles = (url_list, callback_function, final_data_list = []) => 
         if(final_data_list.length > 0) {
             callback_function(final_data_list)
         }
+        else {
+            callback_function([])
+        }
     }
 }
 

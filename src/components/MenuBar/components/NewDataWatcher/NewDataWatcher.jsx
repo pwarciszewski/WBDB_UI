@@ -32,7 +32,7 @@ const NewDataWatcher = () => {
                     requested_ids.push(i)
                 }
                 setLastId(newest_id)
-                fetchData(data => {dispatch(addActiveFrame(data))}, [newest_id])
+                fetchData(data => {dispatch(addActiveFrame(data))}, requested_ids)
             }
         }
     }
@@ -40,7 +40,7 @@ const NewDataWatcher = () => {
     useEffect(() => {
         const interval = setInterval(() => {
           addNewFrame(checked, newest_id, last_newest_id)
-        }, 1000)
+        }, 500)
         return () => clearInterval(interval)
       }, [checked, newest_id, last_newest_id])
 

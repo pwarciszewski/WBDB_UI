@@ -1,9 +1,11 @@
-export const SERVER_IP = 'http://127.0.0.1:8000/DataBrowse'
-export const SERVER_IP_IMG = 'http://127.0.0.1:8000'
+//export const SERVER_IP = 'http://127.0.0.1:8000/DataBrowse'
+//export const SERVER_IP_IMG = 'http://127.0.0.1:8000'
 
+//export const SERVER_IP = 'http://172.17.32.117:7000/DataBrowse'
+//export const SERVER_IP_IMG = 'http://172.17.32.117:7000'
 
-//export const SERVER_IP = '/DataBrowse'
-//export const SERVER_IP_IMG = ''
+export const SERVER_IP = '/DataBrowse'
+export const SERVER_IP_IMG = ''
 
 
 function utilGenerateURIQuery(data) {

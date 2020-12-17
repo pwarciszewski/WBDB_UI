@@ -47,11 +47,21 @@ const renderEchartsOptions = (data_list) => {
     }
  
     for(const data of data_list){
-        rendered_options.series.push({
-            type: 'line',
-            showSymbol: false,
-            data: data
-        })
+        if(data[0].length < 3) {
+            rendered_options.series.push({
+                type: 'line',
+                showSymbol: false,
+                data: data
+            })
+        } else {
+            for(let i = 1; i < data[0].length; i++){
+                rendered_options.series.push({
+                    type:'line',
+                    showSymbol: false,
+                    data: data.map( row => ([row[0], row[i]]))
+                })
+            }
+        }
     }
 
     return(rendered_options)

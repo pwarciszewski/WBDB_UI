@@ -96,7 +96,7 @@ const extractIds = (active_frames, group_name, dev_name) => {
 
 const extractParameters = (operation_in, roi_in) => {
     const operation = (operation_in.hasOwnProperty('operation_properties')) ? operation_in : {'operation_properties':{'variables':{}}}
-    const roi = (roi_in === undefined) ? {'roi_data':{}}:roi_in
+    const roi = (roi_in === undefined) ? {'roi_data':{}} : roi_in
     const extracted_params = {}
     for(const variable in operation.operation_properties.variables) {
         if(roi.roi_data.hasOwnProperty(variable)){

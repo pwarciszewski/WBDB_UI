@@ -11,24 +11,24 @@ import { WrappedLogList,
          WrappedCSVDisplayer } from './wrapped_components'
 
 
-const selectWindow = ({id, window_type}) => {
+const selectWindow = ({id, window_type, z_index}) => {
     switch(window_type) {
         case 'SelectedFrames':
-            return(<WrappedSelectedFramesList key={id} id={id}/>)
+            return(<WrappedSelectedFramesList key={id} id={id} z_index={z_index}/>)
         case 'LogList':
-            return(<WrappedLogList key={id} id={id}/>)
+            return(<WrappedLogList key={id} id={id} z_index={z_index}/>)
         case 'AttributesList':
-            return(<WrappedAttributesList key={id} id={id}/>)
+            return(<WrappedAttributesList key={id} id={id} z_index={z_index}/>)
         case 'ImageDisplayer':
-            return(<WrappedImageDisplayer key={id} id={id}/>)
+            return(<WrappedImageDisplayer key={id} id={id} z_index={z_index}/>)
         case 'ROIs':
-            return(<WrappedSelectRoi key={id} id={id}/>)
+            return(<WrappedSelectRoi key={id} id={id} z_index={z_index}/>)
         case 'RoiManager':
-            return(<WrappedRoiManager key={id} id={id}/>)
+            return(<WrappedRoiManager key={id} id={id} z_index={z_index}/>)
         case 'ChartDisplayer':
-            return(<WrappedChartDisplayer key={id} id={id}/>)
+            return(<WrappedChartDisplayer key={id} id={id} z_index={z_index}/>)
         case 'CSVDisplayer':
-            return(<WrappedCSVDisplayer key={id} id={id}/>)
+            return(<WrappedCSVDisplayer key={id} id={id} z_index={z_index}/>)
         default:
             console.log('Unknown window')
     }

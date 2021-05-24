@@ -12,7 +12,7 @@ import RoutinesDesigner from './RoutinesDesigner'
 
 Modal.setAppElement('#root')
 
-const customStyles = {
+let customStyles = {
     content : {
       top                   : '40%',
       left                  : '50%',
@@ -25,9 +25,20 @@ const customStyles = {
       
     },
     overlay : {
-        backgroundColor: 'rgba(0,0,0,0.4)'
+        backgroundColor: 'rgba(0,0,0,0.4)',
+        zIndex : 1
     }
-  }
+}
+
+const findMaxZIndex = (state) => {
+    let maxZ = 0
+    for(const window of state){
+        if(maxZ<window.z_index){
+            maxZ = window.z_index
+        }
+    }
+    return(maxZ + 1)
+}
 
 const renderOperationOption = (operation) => {
     const op_name = operation.operation_name
@@ -131,6 +142,9 @@ const OperationsMenu = () => {
         fetchOps(data => dispatch(initializeOps(data)))
         setShow(true)
     }
+
+    const top_z_index = useSelector(state => findMaxZIndex(state.openwindows))
+    customStyles.overlay.zIndex = top_z_index
 
     const available_operations = useSelector(state => state.availableops)
     const active_frames = useSelector(state => state.activeframes)

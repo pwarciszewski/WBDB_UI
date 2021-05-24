@@ -3,7 +3,8 @@ import update from 'immutability-helper'
 let ID = 0
 let Z_INDEX = 0
 
-//const initial_state = [{id:0, window_type: 'LogList'}, {id:1, window_type:'SelectedFrames'}]
+//const initial_state = [{id:0, window_type: 'LogList', z_index: 0}, {id:1, window_type:'SelectedFrames', z_index: 0}]
+//Potential overflow error, when Z_index > 2^31
 
 const openwindows = (state = [], action) => {
     switch(action.type) {

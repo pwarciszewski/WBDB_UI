@@ -45,9 +45,22 @@ function getFramesIDsFromTree(nodes_list) {
 }
 
 
+const findMaxZIndex = (state) => {
+    let maxZ = 0
+    for(const window of state){
+        if(maxZ<window.z_index){
+            maxZ = window.z_index
+        }
+    }
+    return(maxZ + 1)
+}
+
+
 const DataTree = () => {
     const data = useSelector(state => state.datatree)
     const dispatch = useDispatch()
+
+    const top_z_index = useSelector(state => findMaxZIndex(state.openwindows))
 
     function onFocus() {
         getAllDataTree(retrieved_data=>{dispatch(loadDataTree(retrieved_data))})
@@ -59,7 +72,7 @@ const DataTree = () => {
        }
 
     return(
-        <div className = 'DataTree'>
+        <div className = 'DataTree' style={{zIndex: top_z_index}}>
             <DropdownTreeSelect 
                 data={data} 
                 onChange={onChange}

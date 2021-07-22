@@ -1,9 +1,11 @@
-export const SERVER_IP = 'http://127.0.0.1:8000/DataBrowse'
-export const SERVER_IP_IMG = 'http://127.0.0.1:8000'
+//export const SERVER_IP = 'http://127.0.0.1:8000/DataBrowse'
+//export const SERVER_IP_IMG = 'http://127.0.0.1:8000'
 
+//export const SERVER_IP = 'http://172.17.32.117:7000/DataBrowse'
+//export const SERVER_IP_IMG = 'http://172.17.32.117:7000'
 
-//export const SERVER_IP = '/DataBrowse'
-//export const SERVER_IP_IMG = ''
+export const SERVER_IP = '/DataBrowse'
+export const SERVER_IP_IMG = ''
 
 
 function utilGenerateURIQuery(data) {
@@ -47,9 +49,9 @@ export function getNewestID(wrapped_action) {
         .catch(err => console.log(err))
 }
 
-export function fetchData(wrapped_action, selected_frames) {
-    postData(SERVER_IP + '/fetchdata/', {'selected': selected_frames})
-        .then(data => {wrapped_action(data);console.log(data)})
+export function fetchData(wrapped_action, selected_frames, group_by_iter = false) {
+    postData(SERVER_IP + '/fetchdata/', {'selected': selected_frames, 'group_by_iter': group_by_iter})
+        .then(data => {wrapped_action(data)})
         .catch(err => console.log(err))
 }
 

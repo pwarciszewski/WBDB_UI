@@ -5,10 +5,11 @@ import './DataTile.css'
 import { SERVER_IP_IMG } from '../../../../api'
 
 
-const prepareImgUrl = (data_frame) => {
+const prepareImgUrl = (iter_frame, source_device, source_result) => {
     let url = ''
     try{
-        url = data_frame.data.results.simpleSubtraction.value
+        let frame_index_in_iteration = iter_frame.data_frames.findIndex((frame) => (frame.data.data_source == source_device))
+        url = iter_frame.data_frames[frame_index_in_iteration].data.results[source_result].value
         url = SERVER_IP_IMG + url
     }
     catch(e)
@@ -18,20 +19,26 @@ const prepareImgUrl = (data_frame) => {
     return(url)
 }
 
-const DataTile = ({ data_frame }) => {
+
+const DataTile = ({ iter_frame, img_source_device, img_source_result }) => {
     const dispatch = useDispatch()
-    
     return(
         <div className="DataTile" 
-             focussed={data_frame.focussed.toString()} >
-            <div className="TileContent" onClick={()=>dispatch(setFocus(data_frame))}>
-                <img className="TileImage" src={prepareImgUrl(data_frame)}
-                    height={70}
-                    width={70}/>
-                {data_frame.data.name + ' ' + ' (ID: ' + data_frame.id + ')'}
+             focussed={iter_frame.focussed.toString()} >
+            <div className="TileContent" onClick={()=>dispatch(setFocus(iter_frame))}>
+                <img className="TileImage" src={prepareImgUrl(iter_frame, img_source_device, img_source_result)} 
+                                           height={70} 
+                                           width={70}/>
+                    {iter_frame.data_frames[0].data.sequence_name}
+                <div className='FileList'>
+                    Files' sources in this iteration:
+                    {iter_frame.data_frames.map((data_element) => {
+                        return(<div key = {data_element.id}> {data_element.data.data_source} </div>)
+                    })}
+                </div>
             </div>
             
-            <div className="close" onClick={()=>dispatch(removeActiveFrame(data_frame))}>
+            <div className="close" onClick={()=>dispatch(removeActiveFrame(iter_frame))}>
             {'\u2715'}
             </div>
         </div>

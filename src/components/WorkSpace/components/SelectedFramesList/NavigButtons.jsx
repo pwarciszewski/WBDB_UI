@@ -10,7 +10,7 @@ const NavigButtons = () => {
     const frame_focussed = active_frames.find(frame => frame.focussed === true)
 
     return (
-        <div>
+        <div className={'NavigButtons'}>
             <button className={'NavigButton'} onClick={()=>dispatch(focusPrevious(frame_focussed))}> {'\u25C0'} </button>
             <button className={'NavigButton'} onClick={()=>dispatch(clearFrames())}> Clear </button>
             <button className={'NavigButton'} onClick={()=>dispatch(focusNext(frame_focussed))}> {'\u25B6'} </button>

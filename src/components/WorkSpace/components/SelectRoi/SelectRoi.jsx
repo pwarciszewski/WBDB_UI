@@ -17,13 +17,15 @@ const SelectRoi = () => {
 
     const dispatch = useDispatch()
 
+    // PREVIOUSLY ALL Math.round functions were replaced with floor function for unknown reason
+    // There might be an issue when dimension(height or widht) + pos (x or y) == max_img_size
     const translateRectDataToPos = (data) => {
         const scalling = currentImageSizeX/600
         if(scalling>1) {
-            return({x: Math.floor(data.x/scalling),
-                    y: Math.floor(data.y/scalling),
-                    width: Math.floor(data.width/scalling),
-                    height: Math.floor(data.height/scalling)})
+            return({x: Math.round(data.x/scalling),
+                    y: Math.round(data.y/scalling),
+                    width: Math.round(data.width/scalling),
+                    height: Math.round(data.height/scalling)})
         }
         else{
             return data
@@ -33,19 +35,19 @@ const SelectRoi = () => {
     const translatePointDataToPos = (data) => {
         const scalling = currentImageSizeX/600
         if(scalling>1) {
-            return({x: Math.floor(data.x/scalling - 12),
-                    y: Math.floor(data.y/scalling - 12)})
+            return({x: Math.round(data.x/scalling - 12),
+                    y: Math.round(data.y/scalling - 12)})
         }
         else{
-            return({x: Math.floor((data.x - 12)),
-                    y: Math.floor((data.y - 12))})
+            return({x: Math.round((data.x - 12)),
+                    y: Math.round((data.y - 12))})
         }
     }
 
     const translateValToData = (val) => {
         const scalling = currentImageSizeX/600
         if(scalling>1) {
-            return(Math.floor(val*scalling))
+            return(Math.round(val*scalling))
         }
         else {
             return(val)
@@ -55,7 +57,7 @@ const SelectRoi = () => {
     const translatePointValToData = (val) => {
         const scalling = currentImageSizeX/600
         if(scalling>1) {
-            return(Math.floor(val*scalling + 12*scalling))
+            return(Math.round(val*scalling + 12*scalling))
         }
         else {
             return(val + 12)
